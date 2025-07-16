@@ -23,6 +23,28 @@ Shows git status for repositories specified in a list file with colorized, compa
 
 Usage: `./git-status.sh <repo_list_file> <repos_directory>`
 
+### git-commit.sh
+Commits changes across multiple repositories with safe hidden file handling.
+
+Usage: `./git-commit.sh [--add-hidden-files] [-m|--message <message>] <repo_list_file> <repos_directory>`
+
+Features:
+- Shows hidden files in red by default but skips them during commit
+- Only commits hidden files when `--add-hidden-files` flag is used
+- Supports `-m` flag for commit message or prompts per repository
+- Colorized output showing file status
+
+### git-revert-commit.sh
+Safely undoes the last commit using soft reset while keeping changes staged.
+
+Usage: `./git-revert-commit.sh [--message-filter <message_start>] <repo_list_file> <repos_directory>`
+
+Features:
+- Performs `git reset --soft HEAD~1` to preserve changes in staging area
+- Optional `--message-filter` flag to only revert commits whose message starts with specified text
+- Shows commit info and files that will be staged after revert
+- Safety checks for initial commits and message filtering
+
 ## Repository Structure Pattern
 
 Scripts expect:
