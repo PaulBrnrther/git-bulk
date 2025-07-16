@@ -1,0 +1,102 @@
+# Class moves for UIEXT-2833: Move to-be-published API to org.knime.node
+# Format: com.old.package.ClassName -> com.new.package.ClassName
+
+# Core DefaultNodeSettings moved to NodeParameters
+org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings -> org.knime.node.parameters.NodeParameters
+org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeSettings.DefaultNodeSettingsContext -> org.knime.node.parameters.NodeParametersInput
+
+# Layout annotations moved to org.knime.node.parameters.layout
+org.knime.core.webui.node.dialog.defaultdialog.layout.After -> org.knime.node.parameters.layout.After
+org.knime.core.webui.node.dialog.defaultdialog.layout.Before -> org.knime.node.parameters.layout.Before
+org.knime.core.webui.node.dialog.defaultdialog.layout.HorizontalLayout -> org.knime.node.parameters.layout.HorizontalLayout
+org.knime.core.webui.node.dialog.defaultdialog.layout.Inside -> org.knime.node.parameters.layout.Inside
+org.knime.core.webui.node.dialog.defaultdialog.layout.Layout -> org.knime.node.parameters.layout.Layout
+org.knime.core.webui.node.dialog.defaultdialog.layout.Section -> org.knime.node.parameters.layout.Section
+org.knime.core.webui.node.dialog.defaultdialog.layout.VerticalLayout -> org.knime.node.parameters.layout.VerticalLayout
+org.knime.core.webui.node.dialog.defaultdialog.layout.WidgetGroup -> org.knime.node.parameters.WidgetGroup
+
+# Config migration moved to org.knime.node.parameters.migration
+org.knime.core.webui.node.dialog.configmapping.ConfigMigration -> org.knime.node.parameters.migration.ConfigMigration
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.DefaultProvider -> org.knime.node.parameters.migration.DefaultProvider
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Migrate -> org.knime.node.parameters.migration.Migrate
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Migration -> org.knime.node.parameters.migration.Migration
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.NodeSettingsMigration -> org.knime.node.parameters.migration.NodeSettingsMigration
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.SettingsLoader -> org.knime.node.parameters.migration.SettingsLoader
+
+# Persistence API moved to org.knime.node.parameters.persistence
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.NodeSettingsPersistor -> org.knime.node.parameters.persistence.NodeSettingsPersistor
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persist -> org.knime.node.parameters.persistence.Persist
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.PersistableSettings -> org.knime.node.parameters.persistence.Persistable
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.Persistor -> org.knime.node.parameters.persistence.Persistor
+org.knime.core.webui.node.dialog.defaultdialog.persistence.api.SettingsSaver -> org.knime.node.parameters.persistence.SettingsSaver
+
+# Widget base classes moved to org.knime.node.parameters
+org.knime.core.webui.node.dialog.defaultdialog.widget.Widget -> org.knime.node.parameters.Widget
+org.knime.core.webui.node.dialog.defaultdialog.widget.Advanced -> org.knime.node.parameters.Advanced
+org.knime.core.webui.node.dialog.defaultdialog.widget.ArrayWidget -> org.knime.node.parameters.array.ArrayWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.DefaultValueProvider -> org.knime.node.parameters.widget.DefaultValueProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.OptionalWidget -> org.knime.node.parameters.widget.OptionalWidget
+
+# Updates and state providers moved to org.knime.node.parameters.updates
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.ButtonReference -> org.knime.node.parameters.updates.ButtonReference
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Effect -> org.knime.node.parameters.updates.Effect
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Predicate -> org.knime.node.parameters.updates.Predicate
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.PredicateProvider -> org.knime.node.parameters.updates.PredicateProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.Reference -> org.knime.node.parameters.updates.Reference
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.StateProvider -> org.knime.node.parameters.updates.StateProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.ValueProvider -> org.knime.node.parameters.updates.ValueProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.ValueReference -> org.knime.node.parameters.updates.ValueReference
+org.knime.core.webui.node.dialog.defaultdialog.widget.updates.BooleanReference -> org.knime.node.parameters.updates.util.BooleanReference
+
+# Validation moved to org.knime.node.parameters.validation
+org.knime.core.webui.node.dialog.defaultdialog.widget.validation.BuiltinValidation -> org.knime.node.parameters.validation.BuiltinValidation
+
+# Widget choices moved to org.knime.node.parameters.widget.choices
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.ChoicesProvider -> org.knime.node.parameters.widget.choices.ChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.ChoicesStateProvider -> org.knime.node.parameters.widget.choices.ChoicesStateProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.ColumnChoicesProvider -> org.knime.node.parameters.widget.choices.ColumnChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.DataTypeChoice -> org.knime.node.parameters.widget.choices.DataTypeChoice
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.DataTypeChoicesStateProvider -> org.knime.node.parameters.widget.choices.DataTypeChoicesStateProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.DomainChoicesProvider -> org.knime.node.parameters.widget.choices.DomainChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.DomainChoicesUtil -> org.knime.node.parameters.widget.choices.DomainChoicesUtil
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.EnumChoice -> org.knime.node.parameters.widget.choices.EnumChoice
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.EnumChoicesProvider -> org.knime.node.parameters.widget.choices.EnumChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.Label -> org.knime.node.parameters.widget.choices.Label
+org.knime.core.webui.node.dialog.defaultdialog.widget.RadioButtonsWidget -> org.knime.node.parameters.widget.choices.RadioButtonsWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.StringChoice -> org.knime.node.parameters.widget.choices.StringChoice
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.StringChoicesProvider -> org.knime.node.parameters.widget.choices.StringChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.TypedStringChoice -> org.knime.node.parameters.widget.choices.TypedStringChoice
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.TypedStringChoicesProvider -> org.knime.node.parameters.widget.choices.TypedStringChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.ValueSwitchWidget -> org.knime.node.parameters.widget.choices.ValueSwitchWidget
+
+# Widget filter choices moved to org.knime.node.parameters.widget.choices.filter
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.ColumnFilterWidget -> org.knime.node.parameters.widget.choices.filter.ColumnFilterWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.variable.FlowVariableFilterWidget -> org.knime.node.parameters.widget.choices.filter.FlowVariableFilterWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.TwinlistWidget -> org.knime.node.parameters.widget.choices.filter.TwinlistWidget
+
+# Widget choices util moved to org.knime.node.parameters.widget.choices.util
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.AllColumnsProvider -> org.knime.node.parameters.widget.choices.util.AllColumnsProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.variable.AllFlowScopedFlowVariablesProvider -> org.knime.node.parameters.widget.choices.util.AllFlowScopedFlowVariablesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.variable.AllFlowVariablesProvider -> org.knime.node.parameters.widget.choices.util.AllFlowVariablesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.CompatibleColumnsProvider -> org.knime.node.parameters.widget.choices.util.CompatibleColumnsProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.FilteredInputTableColumnsProvider -> org.knime.node.parameters.widget.choices.util.FilteredInputTableColumnsProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.variable.FlowVariableChoicesProvider -> org.knime.node.parameters.widget.choices.util.FlowVariableChoicesProvider
+org.knime.core.webui.node.dialog.defaultdialog.widget.choices.column.InputTableIndexHolder -> org.knime.node.parameters.widget.choices.util.InputTableIndexHolder
+
+# Credentials widgets moved to org.knime.node.parameters.widget.credentials
+org.knime.core.webui.node.dialog.defaultdialog.widget.credentials.CredentialsWidget -> org.knime.node.parameters.widget.credentials.CredentialsWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.credentials.PasswordWidget -> org.knime.node.parameters.widget.credentials.PasswordWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.credentials.UsernameWidget -> org.knime.node.parameters.widget.credentials.UsernameWidget
+
+# Message widgets moved to org.knime.node.parameters.widget.message
+org.knime.core.webui.node.dialog.defaultdialog.widget.TextMessage -> org.knime.node.parameters.widget.message.TextMessage
+
+# Number widgets moved to org.knime.node.parameters.widget.number
+org.knime.core.webui.node.dialog.defaultdialog.widget.NumberInputWidget -> org.knime.node.parameters.widget.number.NumberInputWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.validation.NumberInputWidgetValidation -> org.knime.node.parameters.widget.number.NumberInputWidgetValidation
+
+# Text widgets moved to org.knime.node.parameters.widget.text
+org.knime.core.webui.node.dialog.defaultdialog.widget.RichTextInputWidget -> org.knime.node.parameters.widget.text.RichTextInputWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.TextAreaWidget -> org.knime.node.parameters.widget.text.TextAreaWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.TextInputWidget -> org.knime.node.parameters.widget.text.TextInputWidget
+org.knime.core.webui.node.dialog.defaultdialog.widget.validation.TextInputWidgetValidation -> org.knime.node.parameters.widget.text.TextInputWidgetValidation

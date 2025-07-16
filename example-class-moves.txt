@@ -1,0 +1,17 @@
+# Example class moves file
+# Format: com.old.package.ClassName -> com.new.package.ClassName
+
+# Move class to new package
+com.knime.old.MyClass -> com.knime.new.MyClass
+
+# Move and rename class
+com.knime.old.OldName -> com.knime.new.NewName
+
+# Move nested class to top-level and rename
+com.knime.old.OuterClass.InnerClass -> com.knime.new.NowOuterClass
+
+# Move class to nested position
+com.knime.old.StandaloneClass -> com.knime.new.OuterClass.StandaloneClass
+
+# Move nested class out of nesting and rename it
+com.knime.old.Container.NestedHelper -> com.knime.new.RefactoredHelper

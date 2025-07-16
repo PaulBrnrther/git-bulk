@@ -1,0 +1,392 @@
+commit 6a9f65cf04637ebaa03ae9325ef8517b04331201
+Author: Marc Bux <marc.bux@knime.com>
+Date:   Wed Jul 16 14:19:00 2025 +0200
+
+    UIEXT-2833: Move to-be-published API to org.knime.node
+    
+    UIEXT-2833 (Rework DefaultNodeSettings)
+
+M	org.knime.core.ui.testing.tests/src/eclipse/org/knime/testing/node/dialog/DefaultNodeSettingsWithAllWidgets.java
+M	org.knime.core.ui.testing.tests/src/eclipse/org/knime/testing/node/dialog/ExampleDefaultNodeSettings.java
+M	org.knime.core.ui.testing.tests/src/eclipse/org/knime/testing/node/dialog/NestedExampleDefaultNodeSettings.java
+M	org.knime.core.ui.testing.tests/src/eclipse/org/knime/testing/node/dialog/updates/TestSettings.java
+M	org.knime.core.ui.testing/src/org/knime/testing/node/dialog/updates/DialogUpdateSimulator.java
+M	org.knime.core.ui.testing/src/org/knime/testing/node/dialog/updates/UpdateSimulator.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/configmapping/ConfigMappingsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/configmapping/ConfigMigrationTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultKaiNodeInterfaceTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeDialogTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeSettingsServiceTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/PersistUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/SubNodeContainerDialogTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/UpdatesUtilImperativeUpdatesTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/UpdatesUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/filechooser/FileFilterPreviewDataServiceTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/ButtonWidgetActionHandlerHolderTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/DefaultNodeDialogDataServiceImplTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/FlowVariableDataServiceImplTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/DefaultNodeSettingsToJsonFormsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/schema/JsonFormsSchemaUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/ChoicesWidgetUiSchemaOptionsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/GeneralTestLayout.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtilArrayTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtilLayoutTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtilOrdersTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtilRuleTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/OptionalWidgetOptionsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/OtherGeneralTestLayout.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/OtherRootSettings.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/SectionWithoutEnclosingClass.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/TestChoicesProvider.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/TestSection.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/UiSchemaOptionsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/UiSchemaWidgetModificationTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/UpdatesGenericsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/SaveLoadTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/ConfigKeyUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/FieldBasedNodeSettingsPersistorTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/PersistorAndMigratorInstantiationTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/SettingsModelFieldNodeSettingsPersistorFactoryTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/defaultfield/OptionalPersistorTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/AuthenticationSettingsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/LegacyAuthenticationSettingsTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/StringArrayToColumnFilterMigrationTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/selection/SelectionCheckboxesToSelectionModeMigrationTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/WidgetGroupTraverserTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/CompatibleColumnChoicesStateProviderTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/TextMessageTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/DomainChoicesUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/ColumnChoicesProviderUtilTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/TestStateProviderInitializer.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/impl/TestWebUINodeModelSettings.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/core/webui/node/impl/WebUINodeFactoryTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/node/DefaultModelTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/node/DefaultViewTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/node/description/DefaultNodeDescriptionTest.java
+M	org.knime.core.ui.tests/src/eclipse/org/knime/node/testing/DefaultNodeTestUtil.java
+M	org.knime.core.ui/META-INF/MANIFEST.MF
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/NodeDialog.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultDialogDataConverterImpl.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultKaiNodeInterface.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeDialog.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeDialogDataServiceUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeSettingsSerializer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeSettingsService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeSettingsServiceWithVariables.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultTextToNodeSettingsConverter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultViewSettingsValidationUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/KaiSchemaEnhancer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/PersistUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/UpdatesUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/components/SubNodeContainerDialogDataConverter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/components/SubNodeContainerDialogSettingsUpdateService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/components/SubNodeContainerSettingsService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/components/SubNodeContainerTriggerInvocationHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/DefaultDialogDataConverter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/DefaultNodeDialogDataService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/Trigger.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/dbtablechooser/DBTableChooserDataService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/filechooser/FileFilterPreviewDataService.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/ButtonWidgetActionHandlerHolder.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/ButtonWidgetUpdateHandlerHolder.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/DataServiceTriggerInvocationHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/DefaultNodeDialogDataServiceImpl.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/FlowVariableDataServiceImpl.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/impl/HandlerHolder.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/dataservice/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/examples/ArrayWidgetExample.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/hiddenfeaturesnode/HiddenFeaturesNodeSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/button/ButtonActionHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/button/CancelableActionHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/button/NoopButtonUpdateHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/button/SimpleButtonWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/dynamic/DynamicSettingsWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/dynamic/DynamicValuesInput.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/dynamic/StringCaseMatchingSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/FileChooserFilters.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/FileSelection.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/FileWriterWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/LegacyReaderFileSelectionPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/LocalFileWriterWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/file/MultiFileSelection.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/widget/ArrayWidgetInternal.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/widget/ButtonReferenceIdInternal.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/widget/CredentialsWidgetInternal.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/widget/RichTextInputWidgetInternal.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/internal/widget/WidgetInternal.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/ConvertValueUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/DateTimeUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/EnumUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/JsonFormsConsts.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/JsonFormsDataUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/JsonFormsScopeUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/JsonFormsSettingsImpl.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/UpdateResultsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/ControlRendererSpec.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/NumberRendererSpec.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/TextRendererSpec.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/ZonedDateTimeRendererSpec.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/CheckboxRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/CredentialsRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/DateRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/IntegerRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/LegacyCredentialsRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/LocalDateTimeRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/LocalFileChooserRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/NumberRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/TextAreaRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/TextRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/TimeRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/WidgetTreeControlRendererSpec.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/WidgetTreeRenderers.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/fromwidgettree/ZonedDateTimeRenderer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/options/StringChoicesRendererOptions.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/renderers/options/TypedStringChoicesRendererOptions.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/schema/DefaultResolver.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/schema/JsonFormsSchemaUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/DefaultNumberValidationUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/DefaultPredicateInitializer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/DependencyResolver.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsConditionResolver.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsPredicateNegator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsPredicateResolver.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsSchemaConditionUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/JsonFormsUiSchemaUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/LayoutNodesGenerator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/LayoutPart.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/LayoutTree.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/LayoutTreeNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/OptionalWidgetOptionsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/PredicateExtractor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/SchemaInternalPredicateVisitor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/TraversableLayoutTreeNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/UiSchemaOptionsGenerator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/UiSchemaRulesGenerator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/WidgetTreeToLayoutTree.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/jsonforms/uischema/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/AfterAllOf.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/BeforeAllOf.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/booleanhelpers/AlwaysSaveTrueBoolean.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/booleanhelpers/DoNotPersistBoolean.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/ConfigKeyUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/ConfigMappingsFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/CreateDefaultsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/InitializeWithDefaultConstructorUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/PersistenceFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/SettingsLoaderFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/SettingsSaverFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/defaultfield/DefaultFieldNodeSettingsPersistorFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/impl/defaultfield/SubConfigPathProvider.java
+R091	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/package-info.java	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/EnumSettingsModelStringPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelBooleanPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelColumnNameMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelColumnNamePersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelDoublePersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelIntegerPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelLongPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/SettingsModelStringPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persistors/settingsmodel/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persisttree/PersistTreeFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/persisttree/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/columnselection/ColumnSelectionToStringMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/columnselection/ColumnSelectionToStringOrEnumMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/columnselection/StringToStringOrEnumMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/AuthenticationSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/BaseAuthenticationSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/Credentials.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/LegacyAuthenticationSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/credentials/LegacyCredentials.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/datatype/DefaultDataTypeChoicesProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/dbtableselection/DBTableSelection.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/LegacyNameFilterPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/StringFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/ColumnFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/ColumnTypeFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/ColumnTypeToPossibleTypeValueUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/LegacyColumnFilterPersistor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/column/StringArrayToColumnFilterMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/util/DoNotPersistSelected.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/util/ManualFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/util/PatternFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/variable/FlowVariableFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/variable/FlowVariableTypeFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/variable/FlowVariableTypeToPossibleTypeValueUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/variable/LegacyNameFilterToFlowVariableFilterMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/variable/StringFilterToFlowVariableFilterMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/withtypes/TypeFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/filter/withtypes/TypedStringFilter.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/selection/SelectionCheckboxesToSelectionModeMigration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/selection/SelectionMode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/singleselection/RowIDChoice.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/singleselection/StringOrEnum.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/setting/temporalformat/TemporalFormat.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/settingsconversion/DefaultNodeSettingsClassToNodeSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/settingsconversion/JsonDataToDefaultNodeSettingsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/settingsconversion/NodeSettingsToDefaultNodeSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/settingsconversion/ToNodeSettingsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/settingsconversion/VariableSettingsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/ArrayParentNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/LeafNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/Tree.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/TreeFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/TreeNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/tree/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/ArrayLayoutUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/InstantiationUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/MultiFileSelectionUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/WidgetGroupTraverser.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/column/ColumnSelectionUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/DeclarativeDependencyCollector.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/DefaultImperativeStateProviderInitializer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/DefaultStateProviderInitializer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/DependencyInjector.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/IdTriggerVertex.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/ImperativeDependencyCollector.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/InvokeTrigger.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/Location.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/RefsAndValueProvidersAndUiStateProvidersToDependencyTree.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/RendererSpecsToDependencyTreeUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/RendererSpecsToImperativeRefsAndStateProviders.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/ResolvedStateProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/StateComputationFailureException.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/StateProviderInitializerUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/StateVertex.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/TriggerAndDependencies.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/TriggerInvocationHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/WidgetTreeUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/WidgetTreesToDependencyTreeUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/util/updates/WidgetTreesToRefsAndStateProviders.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/CompatibleColumnChoicesStateProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/ComprehensiveDateTimeFormatProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/DateTimeFormatPickerWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/DomainValuesProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/IntervalWidget.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/UpdateHandler.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/ColorColumnsProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/handler/DeclaringDefaultNodeSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/handler/DependencyHandler.java
+D	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/package-info.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopBooleanProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopMaxLengthValidationProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopMaxValidationProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopMinLengthValidationProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopMinValidationProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopPatternValidationProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/NoopProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/TypeDependentMaxValidation.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/TypeDependentMinValidation.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/imperative/ImperativeStateProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/imperative/WithImperativeInitializer.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/And.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/ArrayContainsCondition.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/ConditionToPredicateTranslator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/ConstantPredicate.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/FrameworkPredicate.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/FrameworkPredicateProvider.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/Not.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/Operator.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/Or.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/PredicateVisitor.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/predicates/ScopedPredicate.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/util/WidgetImplementationUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/validation/internal/WorkflowIOParameterNameValidation.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widgettree/WidgetModificationUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widgettree/WidgetTreeFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/impl/WebUINodeConfiguration.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/impl/WebUINodeFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/impl/WebUINodeModel.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/impl/WebUISimpleStreamableFunctionNodeModel.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/impl/analytics/WebUIDialogDetailsUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/util/OptionsAdder.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/view/image/ImageViewViewSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/view/table/RowHeightPersistorUtil.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/view/table/TableNodeView.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/view/table/TableViewLayout.java
+M	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/view/table/TableViewViewSettings.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultModel.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultModelToNodeModelAdapter.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultNode.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultNodeFactory.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultView.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/DefaultViewToNodeViewAdapter.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/RearrangeColumnsDefaultModelToNodeModelAdapter.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/StandardDefaultModelToNodeModelAdapter.java
+M	org.knime.core.ui/src/eclipse/org/knime/node/impl/description/DefaultNodeDescriptionUtil.java
+R093	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/Advanced.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/Advanced.java
+R055	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/DefaultNodeSettings.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/NodeParameters.java
+A	org.knime.core.ui/src/eclipse/org/knime/node/parameters/NodeParametersInput.java
+R089	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/Widget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/Widget.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/WidgetGroup.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/WidgetGroup.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/ArrayWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/array/ArrayWidget.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/After.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/After.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/Before.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/Before.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/HorizontalLayout.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/HorizontalLayout.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/Inside.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/Inside.java
+R099	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/Layout.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/Layout.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/Section.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/Section.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/VerticalLayout.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/VerticalLayout.java
+R091	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/layout/package-info.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/layout/package-info.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/configmapping/ConfigMigration.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/ConfigMigration.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/DefaultProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/DefaultProvider.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/Migrate.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/Migrate.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/Migration.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/Migration.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/NodeSettingsMigration.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/NodeSettingsMigration.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/SettingsLoader.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/migration/SettingsLoader.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/NodeSettingsPersistor.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/persistence/NodeSettingsPersistor.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/Persist.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/persistence/Persist.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/PersistableSettings.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/persistence/Persistable.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/Persistor.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/persistence/Persistor.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/persistence/api/SettingsSaver.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/persistence/SettingsSaver.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/ButtonReference.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/ButtonReference.java
+R094	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/Effect.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/Effect.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/Predicate.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/Predicate.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/PredicateProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/PredicateProvider.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/Reference.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/Reference.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/StateProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/StateProvider.java
+R093	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/ValueProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/ValueProvider.java
+R091	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/ValueReference.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/ValueReference.java
+R086	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/package-info.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/package-info.java
+R089	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/updates/BooleanReference.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/updates/util/BooleanReference.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/validation/BuiltinValidation.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/validation/BuiltinValidation.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/DefaultValueProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/DefaultValueProvider.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/OptionalWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/OptionalWidget.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/ChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/ChoicesProvider.java
+R090	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/ChoicesStateProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/ChoicesStateProvider.java
+R086	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/ColumnChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/ColumnChoicesProvider.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/DataTypeChoice.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/DataTypeChoice.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/DataTypeChoicesStateProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/DataTypeChoicesStateProvider.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/DomainChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/DomainChoicesProvider.java
+R095	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/DomainChoicesUtil.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/DomainChoicesUtil.java
+R096	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/EnumChoice.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/EnumChoice.java
+R088	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/EnumChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/EnumChoicesProvider.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/Label.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/Label.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/RadioButtonsWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/RadioButtonsWidget.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/StringChoice.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/StringChoice.java
+R090	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/StringChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/StringChoicesProvider.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/TypedStringChoice.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/TypedStringChoice.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/TypedStringChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/TypedStringChoicesProvider.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/ValueSwitchWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/ValueSwitchWidget.java
+R094	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/ColumnFilterWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/filter/ColumnFilterWidget.java
+R094	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/variable/FlowVariableFilterWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/filter/FlowVariableFilterWidget.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/TwinlistWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/filter/TwinlistWidget.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/AllColumnsProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/AllColumnsProvider.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/variable/AllFlowScopedFlowVariablesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/AllFlowScopedFlowVariablesProvider.java
+R091	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/variable/AllFlowVariablesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/AllFlowVariablesProvider.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/CompatibleColumnsProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/CompatibleColumnsProvider.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/FilteredInputTableColumnsProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/FilteredInputTableColumnsProvider.java
+R086	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/variable/FlowVariableChoicesProvider.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/FlowVariableChoicesProvider.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/choices/column/InputTableIndexHolder.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/choices/util/InputTableIndexHolder.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/credentials/CredentialsWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/credentials/CredentialsWidget.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/credentials/PasswordWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/credentials/PasswordWidget.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/credentials/UsernameWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/credentials/UsernameWidget.java
+R093	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/TextMessage.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/message/TextMessage.java
+R093	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/NumberInputWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/number/NumberInputWidget.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/validation/NumberInputWidgetValidation.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/number/NumberInputWidgetValidation.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/RichTextInputWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/text/RichTextInputWidget.java
+R097	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/TextAreaWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/text/TextAreaWidget.java
+R092	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/TextInputWidget.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/text/TextInputWidget.java
+R098	org.knime.core.ui/src/eclipse/org/knime/core/webui/node/dialog/defaultdialog/widget/validation/TextInputWidgetValidation.java	org.knime.core.ui/src/eclipse/org/knime/node/parameters/widget/text/TextInputWidgetValidation.java
