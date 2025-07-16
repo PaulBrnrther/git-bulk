@@ -47,3 +47,7 @@ Scripts expect:
 ## Output Design Principles
 
 - This is a productivity tool, so the output of a script should be visually parsable easily: Compact layout and using coloring where it makes sense
+
+## Safety and Configurability
+
+- The tools should be safe to use per default and optionally configurable to do unsafe things (e.g. by --no-fetch for a script that resets to origin or --no-stash for a tool that checks out a new branch)
