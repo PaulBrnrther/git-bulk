@@ -88,8 +88,8 @@ while IFS= read -r repo_name; do
             status_char="${line:0:2}"
             file_path="${line:3}"
             
-            # Check if it's a hidden file
-            if [[ "$file_path" == .* ]]; then
+            # Check if it's a hidden file (filename starts with . or any directory in path starts with .)
+            if [[ "$file_path" == .* ]] || [[ "$file_path" == */.*/* ]] || [[ "$file_path" == */.* ]]; then
                 hidden_files_present=true
                 if [ "$add_hidden_files" = true ]; then
                     color="\033[32m"  # Green for files that will be committed
@@ -112,10 +112,10 @@ while IFS= read -r repo_name; do
     if [ "$add_hidden_files" = true ]; then
         git add .
     else
-        # Add only non-hidden files
-        git add $(git ls-files --others --exclude-standard | grep -v '^\.')
-        git add $(git diff --name-only | grep -v '^\.')
-        git add $(git diff --cached --name-only | grep -v '^\.')
+        # Add only non-hidden files (exclude files starting with . or containing /.* in path)
+        git add $(git ls-files --others --exclude-standard | grep -v -E '^\.|/\.')
+        git add $(git diff --name-only | grep -v -E '^\.|/\.')
+        git add $(git diff --cached --name-only | grep -v -E '^\.|/\.')
     fi
     
     # Check if there are staged changes
