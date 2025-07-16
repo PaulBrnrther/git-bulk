@@ -1,7 +1,22 @@
 #!/bin/bash
 
+# Parse arguments
+skip_fetch=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --no-fetch)
+            skip_fetch=true
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <repo_list_file> <repos_directory>"
+    echo "Usage: $0 [--no-fetch] <repo_list_file> <repos_directory>"
+    echo "  --no-fetch: Skip fetching from remote (default: fetch before reset)"
     echo "  repo_list_file: Path to file containing repository names (one per line)"
     echo "  repos_directory: Path to directory containing the repositories"
     exit 1
@@ -40,6 +55,15 @@ while IFS= read -r repo_name; do
     
     echo "=== $repo_name ==="
     cd "$repo_path" || continue
+    
+    # Fetch from remote unless --no-fetch is specified
+    if [ "$skip_fetch" = false ]; then
+        if git fetch origin >/dev/null 2>&1; then
+            echo -e "  \033[36mFetched from origin\033[0m"
+        else
+            echo -e "  \033[31mFailed to fetch from origin\033[0m"
+        fi
+    fi
     
     # Check if origin/master exists
     if ! git rev-parse --verify origin/master >/dev/null 2>&1; then
