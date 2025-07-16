@@ -18,10 +18,10 @@ The project follows a simple script-based architecture:
 
 ## Current Scripts
 
-### list-branches.sh
-Lists all branches (local and remote) for repositories specified in a list file.
+### git-status.sh
+Shows git status for repositories specified in a list file with colorized, compact output for easy visual parsing.
 
-Usage: `./list-branches.sh <repo_list_file> <repos_directory>`
+Usage: `./git-status.sh <repo_list_file> <repos_directory>`
 
 ## Repository Structure Pattern
 
@@ -33,8 +33,8 @@ Scripts expect:
 ## Example Usage
 
 ```bash
-# List branches for repos in repos-with-defaultnodesettings
-./list-branches.sh repos-with-defaultnodesettings ~/knime/repos
+# Show git status for repos in repos-with-defaultnodesettings
+./git-status.sh repos-with-defaultnodesettings ~/knime/repos
 ```
 
 ## Development Notes
