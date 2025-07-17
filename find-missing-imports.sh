@@ -157,17 +157,16 @@ while IFS= read -r line; do
             # Check if file contains the class name
             if grep -q "\b$class_name\b" "$file"; then
                 # Check if file has the import statement
-                if ! grep -q "^import.*$class_fqn" "$file"; then
+                fqn_escaped=$(escape_dots "$class_fqn")
+                if ! grep -q "^import.*$fqn_escaped" "$file"; then
                     # Also check if it's not using a wildcard import that would cover this class
                     package_path=$(echo "$class_fqn" | sed 's/\.[^.]*$//')
-                    if ! grep -q "^import.*${package_path}\.\*" "$file"; then
-                        # Make sure the class name usage is not in a comment, string literal, or package declaration
-                        if rg -q "(?<!//.*)\b$class_name\b(?![^\"]*\")" "$file" 2>/dev/null; then
-                            # Get relative path from repo root
-                            rel_path=${file#$repo_path/}
-                            echo "  $repo_name: $rel_path"
-                            found_files=true
-                        fi
+                    package_escaped=$(escape_dots "$package_path")
+                    if ! grep -q "^import.*${package_escaped}\.\*" "$file"; then
+                        # Get relative path from repo root
+                        rel_path=${file#$repo_path/}
+                        echo "  $repo_name: $rel_path"
+                        found_files=true
                     fi
                 fi
             fi
