@@ -1,131 +1,115 @@
 #!/bin/bash
 
+# Java Class Renaming Script for Multiple Repositories
+# Usage: ./regex-replace-class-move.sh [--no-git] <mapping_file> <repo_list_file> <repos_directory>
+# 
+# mapping_file format (one per line):
+# old.package.ClassName -> new.package.NewClassName
+#
+# Note: This script replaces class references everywhere in the file, including:
+# - Import statements
+# - Variable declarations and method signatures  
+# - Comments and string literals containing class names
+# - Fully qualified names and simple class names
+
+set -e
+
 # Parse command line arguments
-class_moves_file=""
-repo_list_file=""
-repos_directory=""
+NO_GIT_CHECK=false
+MAPPING_FILE=""
+REPO_LIST_FILE=""
+REPOS_DIRECTORY=""
 
 while [[ $# -gt 0 ]]; do
-    if [ -z "$class_moves_file" ]; then
-        class_moves_file="$1"
-    elif [ -z "$repo_list_file" ]; then
-        repo_list_file="$1"
-    elif [ -z "$repos_directory" ]; then
-        repos_directory="$1"
-    else
-        echo "Error: Too many arguments"
-        exit 1
-    fi
-    shift
+    case $1 in
+        --no-git)
+            NO_GIT_CHECK=true
+            shift
+            ;;
+        *)
+            if [ -z "$MAPPING_FILE" ]; then
+                MAPPING_FILE="$1"
+            elif [ -z "$REPO_LIST_FILE" ]; then
+                REPO_LIST_FILE="$1"
+            elif [ -z "$REPOS_DIRECTORY" ]; then
+                REPOS_DIRECTORY="$1"
+            else
+                echo "Error: Too many arguments"
+                exit 1
+            fi
+            shift
+            ;;
+    esac
 done
 
-if [ -z "$class_moves_file" ] || [ -z "$repo_list_file" ] || [ -z "$repos_directory" ]; then
-    echo "Usage: $0 <class_moves_file> <repo_list_file> <repos_directory>"
-    echo "  class_moves_file: Path to file containing class moves (one per line)"
+if [ -z "$MAPPING_FILE" ] || [ -z "$REPO_LIST_FILE" ] || [ -z "$REPOS_DIRECTORY" ]; then
+    echo "Usage: $0 [--no-git] <mapping_file> <repo_list_file> <repos_directory>"
+    echo "  --no-git: Skip git repository validation"
+    echo "  mapping_file: Path to file containing class moves (one per line)"
     echo "  repo_list_file: Path to file containing repository names (one per line)"
     echo "  repos_directory: Path to directory containing the repositories"
     echo ""
-    echo "Class moves file format:"
-    echo "  com.old.package.ClassName -> com.new.package.ClassName"
-    echo "  com.old.package.OldName -> com.new.package.NewName"
-    echo "  com.old.package.OuterClass.InnerClass -> com.new.package.InnerClass"
-    echo "  # Comments start with #"
-    echo ""
-    echo "Examples:"
-    echo "  # Move class to new package"
-    echo "  com.knime.old.MyClass -> com.knime.new.MyClass"
-    echo "  # Move and rename class"
-    echo "  com.knime.old.OldName -> com.knime.new.NewName"
-    echo "  # Move nested class"
-    echo "  com.knime.old.Outer.Inner -> com.knime.new.Inner"
+    echo "mapping_file format: old.package.ClassName -> new.package.NewClassName"
     exit 1
 fi
 
-if [ ! -f "$class_moves_file" ]; then
-    echo "Error: Class moves file '$class_moves_file' not found"
+if [ ! -f "$MAPPING_FILE" ]; then
+    echo "Error: Mapping file '$MAPPING_FILE' not found"
     exit 1
 fi
 
-if [ ! -f "$repo_list_file" ]; then
-    echo "Error: Repository list file '$repo_list_file' not found"
+if [ ! -f "$REPO_LIST_FILE" ]; then
+    echo "Error: Repository list file '$REPO_LIST_FILE' not found"
     exit 1
 fi
 
-if [ ! -d "$repos_directory" ]; then
-    echo "Error: Repositories directory '$repos_directory' not found"
+if [ ! -d "$REPOS_DIRECTORY" ]; then
+    echo "Error: Repositories directory '$REPOS_DIRECTORY' not found"
     exit 1
 fi
 
-# Function to extract class name from full class path
-get_class_name() {
-    local full_class="$1"
-    echo "${full_class##*.}"
-}
-
-# Function to extract package from full class path
-get_package() {
-    local full_class="$1"
-    local class_name=$(get_class_name "$full_class")
-    echo "${full_class%.$class_name}"
-}
-
-# Function to generate sed patterns for a class move
-generate_patterns() {
-    local from_class="$1"
-    local to_class="$2"
-    
-    local from_simple_name=$(get_class_name "$from_class")
-    local to_simple_name=$(get_class_name "$to_class")
-    
-    # Escape dots for regex
-    local from_class_escaped="${from_class//./\\.}"
-    local to_class_escaped="${to_class//./\\.}"
-    
-    # Pattern 1: Update import statements (always needed)
-    echo "s/import ${from_class_escaped}\b/import ${to_class_escaped}/g"
-    
-    # Pattern 2: If class name changed, update class references with word boundaries
-    if [ "$from_simple_name" != "$to_simple_name" ]; then
-        echo "s/\\b${from_simple_name}\\b/${to_simple_name}/g"
+# Check if required tools are available
+for tool in rg sed; do
+    if ! command -v "$tool" &> /dev/null; then
+        echo "Error: $tool is not installed"
+        exit 1
     fi
-}
-
-# Read class moves and generate patterns
-patterns=()
-while IFS= read -r line; do
-    # Skip empty lines and comments
-    if [[ -z "$line" || "$line" =~ ^# ]]; then
-        continue
-    fi
-    
-    # Parse the move: "from -> to"
-    if [[ "$line" =~ ^([^-]+)\ *-\>\ *([^-]+)$ ]]; then
-        from_class=$(echo "${BASH_REMATCH[1]}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        to_class=$(echo "${BASH_REMATCH[2]}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        
-        echo "Processing move: $from_class -> $to_class"
-        
-        # Generate patterns for this move
-        while IFS= read -r pattern; do
-            if [ -n "$pattern" ]; then
-                patterns+=("$pattern")
-            fi
-        done <<< "$(generate_patterns "$from_class" "$to_class")"
-    else
-        echo "Warning: Invalid move format: $line"
-    fi
-done < "$class_moves_file"
-
-if [ ${#patterns[@]} -eq 0 ]; then
-    echo "Error: No valid class moves found in '$class_moves_file'"
-    exit 1
-fi
-
-echo "Generated ${#patterns[@]} refactoring pattern(s):"
-for pattern in "${patterns[@]}"; do
-    echo "  $pattern"
 done
-echo
+
+# Function to escape dots for sed
+escape_dots() {
+    echo "$1" | sed 's/\./\\./g'
+}
+
+# Function to extract class name from FQN
+get_class_name() {
+    echo "$1" | sed 's/.*\.//'
+}
+
+# Function to show progress bar (only at 10% intervals)
+show_progress() {
+    local current=$1
+    local total=$2
+    local width=50
+    local percentage=$((current * 100 / total))
+    local filled=$((current * width / total))
+    local empty=$((width - filled))
+    
+    # Only update display at 10% intervals or at completion
+    local prev_percentage=$(( (current - 1) * 100 / total ))
+    local prev_ten_percent=$((prev_percentage / 10))
+    local curr_ten_percent=$((percentage / 10))
+    
+    if [ $current -eq 1 ] || [ $current -eq $total ] || [ $curr_ten_percent -gt $prev_ten_percent ]; then
+        printf "\r  Progress: ["
+        printf "%*s" $filled | tr ' ' '█'
+        printf "%*s" $empty | tr ' ' '░'
+        printf "] %d%% (%d/%d)" $percentage $current $total
+    fi
+}
+
+# Convert mapping file to absolute path
+MAPPING_FILE=$(realpath "$MAPPING_FILE")
 
 # Process repositories
 while IFS= read -r repo_name; do
@@ -134,58 +118,76 @@ while IFS= read -r repo_name; do
         continue
     fi
     
-    repo_path="$repos_directory/$repo_name"
+    repo_path="$REPOS_DIRECTORY/$repo_name"
     
     if [ ! -d "$repo_path" ]; then
         echo "Warning: Repository '$repo_name' not found at $repo_path"
         continue
     fi
     
+    if [ "$NO_GIT_CHECK" = false ] && [ ! -d "$repo_path/.git" ]; then
+        echo "Warning: '$repo_name' is not a git repository"
+        continue
+    fi
     
     echo "=== $repo_name ==="
     cd "$repo_path" || continue
     
-    # Find all .java files
-    java_files=$(find . -name "*.java" -type f)
-    
-    if [ -z "$java_files" ]; then
-        echo "  No .java files found"
-        echo
-        continue
-    fi
-    
-    modified_files=()
-    
-    # Process each Java file
-    while IFS= read -r java_file; do
-        if [ -n "$java_file" ]; then
-            # Apply all refactoring patterns in sequence directly to the file
-            file_changed=false
-            for pattern in "${patterns[@]}"; do
-                if sed -i "" "$pattern" "$java_file" 2>/dev/null; then
-                    file_changed=true
-                fi
-            done
-            
-            if [ "$file_changed" = true ]; then
-                modified_files+=("$java_file")
-            fi
-        fi
-    done <<< "$java_files"
-    
-    # Display results
-    if [ ${#modified_files[@]} -eq 0 ]; then
-        echo "  No changes needed"
-    else
-        echo -e "  \033[32mModified ${#modified_files[@]} file(s):\033[0m"
+    # Process each mapping for this repository
+    while IFS= read -r line; do
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
         
-        for file in "${modified_files[@]}"; do
-            # Remove leading ./ for cleaner output
-            clean_file="${file#./}"
-            echo -e "    \033[32m$clean_file\033[0m"
-        done
-    fi
+        # Parse mapping: old -> new
+        if [[ "$line" =~ ^([^-]+)[[:space:]]*-\>[[:space:]]*(.+)$ ]]; then
+            old_fqn=$(echo "${BASH_REMATCH[1]}" | xargs)
+            new_fqn=$(echo "${BASH_REMATCH[2]}" | xargs)
+            
+            old_class=$(get_class_name "$old_fqn")
+            new_class=$(get_class_name "$new_fqn")
+            
+            old_fqn_escaped=$(escape_dots "$old_fqn")
+            
+            # Find Java files containing references
+            java_files=$(rg -l --type java "$old_fqn|$old_class" . 2>/dev/null || true)
+            
+            if [ -z "$java_files" ]; then
+                continue
+            fi
+            
+            # Count total files for progress bar
+            total_files=$(echo "$java_files" | wc -l | tr -d ' ')
+            current_file=0
+            
+            echo "  Processing: $old_fqn -> $new_fqn"
+            echo "  Found references in $total_files files"
+            
+            # Process each file with progress bar
+            while IFS= read -r file; do
+                [ -f "$file" ] || continue
+                
+                current_file=$((current_file + 1))
+                show_progress $current_file $total_files
+                
+                # Replace fully qualified name everywhere 
+                sed -i "" "s/import ${old_fqn_escaped}\b/import ${new_fqn}/g" "$file"
+                sed -i "" "s/\([^a-zA-Z0-9_]\)${old_fqn_escaped}\([^a-zA-Z0-9_]\)/\1${new_fqn}\2/g" "$file"
+                
+                # If class name changed, replace standalone class name usage
+                if [ "$old_class" != "$new_class" ]; then
+                    sed -i "" "s/\([^a-zA-Z0-9_]\)${old_class}\([^a-zA-Z0-9_]\)/\1${new_class}\2/g" "$file"
+                fi
+                
+            done <<< "$java_files"
+            
+            # Clear progress bar and show completion
+            printf "\r  Progress: [%50s] 100%% (%d/%d) ✓ Complete\n" "$(printf '%*s' 50 | tr ' ' '█')" $total_files $total_files
+            
+        else
+            echo "Warning: Invalid format: $line"
+        fi
+    done < "$MAPPING_FILE"
     
     echo
     
-done < "$repo_list_file"
+done < "$REPO_LIST_FILE"
