@@ -50,6 +50,8 @@ if [ -z "$MAPPING_FILE" ] || [ -z "$REPO_LIST_FILE" ] || [ -z "$REPOS_DIRECTORY"
     echo "  repos_directory: Path to directory containing the repositories"
     echo ""
     echo "mapping_file format: old.package.ClassName -> new.package.NewClassName"
+    echo ""
+    echo "Note: repos_directory can be relative or absolute (automatically converted to absolute)"
     exit 1
 fi
 
@@ -67,6 +69,9 @@ if [ ! -d "$REPOS_DIRECTORY" ]; then
     echo "Error: Repositories directory '$REPOS_DIRECTORY' not found"
     exit 1
 fi
+
+# Convert repos_directory to absolute path
+REPOS_DIRECTORY=$(realpath "$REPOS_DIRECTORY")
 
 # Check if required tools are available
 for tool in rg sed; do
@@ -111,7 +116,8 @@ show_progress() {
 # Convert mapping file to absolute path
 MAPPING_FILE=$(realpath "$MAPPING_FILE")
 
-# Process repositories
+# Build array of valid repository paths
+repo_paths=()
 while IFS= read -r repo_name; do
     # Skip empty lines and comments
     if [[ -z "$repo_name" || "$repo_name" =~ ^# ]]; then
@@ -130,64 +136,74 @@ while IFS= read -r repo_name; do
         continue
     fi
     
-    echo "=== $repo_name ==="
-    cd "$repo_path" || continue
+    repo_paths+=("$repo_path")
+done < "$REPO_LIST_FILE"
+
+if [ ${#repo_paths[@]} -eq 0 ]; then
+    echo "Error: No valid repositories found"
+    exit 1
+fi
+
+echo "Found ${#repo_paths[@]} valid repositories"
+echo
+
+# Process each mapping across all repositories at once
+while IFS= read -r line; do
+    # Skip empty lines and comments
+    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
     
-    # Process each mapping for this repository
-    while IFS= read -r line; do
-        # Skip empty lines and comments
-        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+    # Parse mapping: old -> new
+    if [[ "$line" =~ ^([^-]+)[[:space:]]*-\>[[:space:]]*(.+)$ ]]; then
+        old_fqn=$(echo "${BASH_REMATCH[1]}" | xargs)
+        new_fqn=$(echo "${BASH_REMATCH[2]}" | xargs)
         
-        # Parse mapping: old -> new
-        if [[ "$line" =~ ^([^-]+)[[:space:]]*-\>[[:space:]]*(.+)$ ]]; then
-            old_fqn=$(echo "${BASH_REMATCH[1]}" | xargs)
-            new_fqn=$(echo "${BASH_REMATCH[2]}" | xargs)
+        old_class=$(get_class_name "$old_fqn")
+        new_class=$(get_class_name "$new_fqn")
+        
+        old_fqn_escaped=$(escape_dots "$old_fqn")
+        
+        echo "Processing: $old_fqn -> $new_fqn"
+        
+        # Find Java files containing references across ALL repositories
+        java_files=$(rg -l --type java "$old_fqn|$old_class" "${repo_paths[@]}" 2>/dev/null || true)
+        
+        if [ -z "$java_files" ]; then
+            echo "  No references found in any repository"
+            echo
+            continue
+        fi
+        
+        # Count total files for progress bar
+        total_files=$(echo "$java_files" | wc -l | tr -d ' ')
+        current_file=0
+        
+        echo "  Found references in $total_files files across all repositories"
+        
+        # Process each file with progress bar
+        while IFS= read -r file; do
+            [ -f "$file" ] || continue
             
-            old_class=$(get_class_name "$old_fqn")
-            new_class=$(get_class_name "$new_fqn")
+            current_file=$((current_file + 1))
+            show_progress $current_file $total_files
             
-            old_fqn_escaped=$(escape_dots "$old_fqn")
+            # Replace fully qualified name everywhere 
+            sed -i "" "s/import ${old_fqn_escaped}\b/import ${new_fqn}/g" "$file"
+            sed -i "" "s/\([^a-zA-Z0-9_]\)${old_fqn_escaped}\([^a-zA-Z0-9_]\)/\1${new_fqn}\2/g" "$file"
             
-            # Find Java files containing references
-            java_files=$(rg -l --type java "$old_fqn|$old_class" . 2>/dev/null || true)
-            
-            if [ -z "$java_files" ]; then
-                continue
+            # If class name changed, replace standalone class name usage
+            if [ "$old_class" != "$new_class" ]; then
+                sed -i "" "s/\([^a-zA-Z0-9_]\)${old_class}\([^a-zA-Z0-9_]\)/\1${new_class}\2/g" "$file"
             fi
             
-            # Count total files for progress bar
-            total_files=$(echo "$java_files" | wc -l | tr -d ' ')
-            current_file=0
-            
-            echo "  Processing: $old_fqn -> $new_fqn"
-            echo "  Found references in $total_files files"
-            
-            # Process each file with progress bar
-            while IFS= read -r file; do
-                [ -f "$file" ] || continue
-                
-                current_file=$((current_file + 1))
-                show_progress $current_file $total_files
-                
-                # Replace fully qualified name everywhere 
-                sed -i "" "s/import ${old_fqn_escaped}\b/import ${new_fqn}/g" "$file"
-                sed -i "" "s/\([^a-zA-Z0-9_]\)${old_fqn_escaped}\([^a-zA-Z0-9_]\)/\1${new_fqn}\2/g" "$file"
-                
-                # If class name changed, replace standalone class name usage
-                if [ "$old_class" != "$new_class" ]; then
-                    sed -i "" "s/\([^a-zA-Z0-9_]\)${old_class}\([^a-zA-Z0-9_]\)/\1${new_class}\2/g" "$file"
-                fi
-                
-            done <<< "$java_files"
-            
-            # Clear progress bar and show completion
-            printf "\r  Progress: [%50s] 100%% (%d/%d) ✓ Complete\n" "$(printf '%*s' 50 | tr ' ' '█')" $total_files $total_files
-            
-        else
-            echo "Warning: Invalid format: $line"
-        fi
-    done < "$MAPPING_FILE"
+        done <<< "$java_files"
+        
+        # Clear progress bar and show completion
+        printf "\r  Progress: [%50s] 100%% (%d/%d) ✓ Complete\n" "$(printf '%*s' 50 | tr ' ' '█')" $total_files $total_files
+        
+    else
+        echo "Warning: Invalid format: $line"
+    fi
     
     echo
     
-done < "$REPO_LIST_FILE"
+done < "$MAPPING_FILE"

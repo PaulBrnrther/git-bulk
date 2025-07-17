@@ -1,1 +1,2 @@
 knime-core-ui
+knime-base
