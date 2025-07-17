@@ -141,10 +141,6 @@ while IFS= read -r repo_name; do
         continue
     fi
     
-    if [ ! -d "$repo_path/.git" ]; then
-        echo "Warning: '$repo_name' is not a git repository"
-        continue
-    fi
     
     echo "=== $repo_name ==="
     cd "$repo_path" || continue
